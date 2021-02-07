@@ -26,7 +26,6 @@ use Error;
 use Exception;
 use Tiat\Router\Request\Route;
 
-use function count;
 use function define;
 use function defined;
 use function file_exists;
@@ -46,7 +45,7 @@ class Bootstrap {
 
 	//
 	private        $_autoload;
-	private object $_loader;    // MVC Router instance (must be protected or will not work)
+	private object $_loader;    // MVC Router instance
 
 	/**
 	 * Bootstrap constructor.
@@ -54,7 +53,7 @@ class Bootstrap {
 	 * @param    array    $ini
 	 */
 	public function __construct(array $ini = []) {
-		if(count($ini)):
+		if(! empty($ini)):
 			$this->setIni($ini);
 		endif;
 	}
@@ -67,7 +66,7 @@ class Bootstrap {
 	 * @return  bool
 	 */
 	final public function setIni(array $ini = []) : bool {
-		if(count($ini)):
+		if(! empty($ini)):
 			foreach($ini as $key => $val):
 				if(is_scalar($key) && is_scalar($val)):
 					ini_set($key, $val);
@@ -96,7 +95,7 @@ class Bootstrap {
 	 * @return  bool
 	 */
 	final public function setPath(string $base = '', array $path = []) : bool {
-		if(count($path)):
+		if(! empty($path)):
 			foreach($path as $key => $val):
 				$this->_definePath($key, $base . $val);
 			endforeach;
