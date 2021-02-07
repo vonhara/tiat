@@ -1,0 +1,13 @@
+RewriteEngine on
+RewriteRule ^robots\.txt$ robots/%{HTTP_HOST}.txt [L,NC]
+RewriteRule ^sitemap.xml$ sitemap/%{HTTP_HOST}.xml [L,NC]
+RewriteRule ^sw.js$ manifest/%{HTTP_HOST}.js [L,NC]
+RewriteRule ^worker.js$ manifest/%{HTTP_HOST}.worker.js [L,NC]
+RewriteRule ^manifest.json$ manifest/%{HTTP_HOST}/manifest.json [L,NC]
+RewriteCond %{REQUEST_URI} "/robots/*"
+RewriteRule (.*) $1 [NC]
+RewriteRule ^ofc - [L,NC]
+RewriteRule ^swf - [L,NC]
+RewriteRule ^js - [L,NC]
+RewriteRule ^xml - [L,NC]
+RewriteRule !\.(js|ico|gif|jpg|png|css|json|txt|xml)$ index.php
