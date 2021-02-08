@@ -75,7 +75,7 @@ class Route extends Request {
 	protected string $_instance;
 
 	// Config instance
-	protected $_config = NULL;
+	protected object $_config;
 
 	// Router settings
 	protected array $_settings       = [];
@@ -134,7 +134,7 @@ class Route extends Request {
 	 *
 	 */
 	private function _getConfigObject() : void {
-		if(! is_object($this->_config)):
+		if(empty($this->_config)):
 			$this->_config = new Config();
 		endif;
 
