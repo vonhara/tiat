@@ -71,107 +71,84 @@ class Status {
 	 */
 	final public static function getResponse(int $code = 0) : string {
 		if($code > 0):
-			switch($code):
+			$message = match ($code) {
 				// Standard response for successful HTTP requests.
-				case "200":
-					return 'OK';
+				200 => 'OK',
 
 				// The request has been fulfilled and resulted in a new resource being created.
-				case "201":
-					return 'Created';
+				201 => 'Created',
 
 				// The request has been accepted for processing, but the processing has not been completed.
-				case "202":
-					return 'Accepted';
+				202 => 'Accepted',
 
 				// The server successfully processed the request, but is returning information that may be from another source.
-				case "203":
-					return 'Non-Authoritative Information';
+				203 => 'Non-Authoritative Information',
 
 				// The server successfully processed the request, but is not returning any content. Usually with DELETE
-				case "204":
-					return 'No Content';
+				204 => 'No Content',
 
 				// This and all future requests should be directed to the given URI.
-				case "301":
-					return 'Moved Permanently';
+				301 => 'Moved Permanently',
 
 				// Indicates that the resource has not been modified since the version specified by the request headers If-Modified-Since or If-None-Match
-				case "304":
-					return 'Not Modified';
+				304 => 'Not Modified',
 
 				// In this case, the request should be repeated with another URI; however, future requests should still use the original URI
-				case "307":
-					return 'Temporary Redirect';
+				307 => 'Temporary Redirect',
 
 				// The request, and all future requests should be repeated using another URI
-				case "308":
-					return 'Permanent Redirect';
+				308 => 'Permanent Redirect',
 
 				// The server cannot or will not process the request due to something that is perceived to be a client error
-				case "400":
-					return 'Bad Request';
+				400 => 'Bad Request',
 
 				// Similar to 403 Forbidden, but specifically for use when authentication is required and has failed or has not yet been provided
-				case "401":
-					return 'Unauthorized';
+				401 => 'Unauthorized',
 
 				// The original intention was that this code might be used as part of some form of digital cash or micropayment scheme
-				case "402":
-					return 'Payment Required';
+				402 => 'Payment Required',
 
 				// The request was a valid request, but the server is refusing to respond to it
-				case "403":
-					return 'Forbidden';
+				403 => 'Forbidden',
 
 				// The requested resource could not be found but may be available again in the future
-				case "404":
-					return 'Not Found';
+				404 => 'Not Found',
 
-				case "409":
-					return 'Conflict';
+				409 => 'Conflict',
 
 				// Indicates that the resource requested is no longer available and will not be available again
-				case "410":
-					return 'Gone';
+				410 => 'Gone',
 
 				// The server is refusing to service the request because the entity of the request is in a format not supported by the requested resource for the requested method.
-				case "415":
-					return 'Unsupported Media Type';
+				415 => 'Unsupported Media Type',
 
-				case "500":
-					return 'Internal Server Error';
+				500 => 'Internal Server Error',
 
-				case "502":
-					return 'Bad Gateway';
+				502 => 'Bad Gateway',
 
-				case "503":
-					return 'Service Unavailable';
+				503 => 'Service Unavailable',
 
-				case "504":
-					return 'Gateway Timeout';
+				504 => 'Gateway Timeout',
 
 				// The 520 error is used as a "catch-all response when the origin server returns something unexpected"
 				// Listing connection resets, large headers, and empty or invalid responses as common triggers.
-				case "520":
-					return 'Unknown Error';
+				520 => 'Unknown Error',
 
 				// The origin server has refused the connection from frontend
-				case "521":
-					return 'Web Server Is Down';
+				512 => 'Web Server Is Down',
 
 				// Could not negotiate a TCP handshake with the origin server
-				case "522":
-					return 'Connection Timed Out';
+				522 => 'Connection Timed Out',
 
 				// Could not reach the origin server; for example, if the DNS records for the origin server are incorrect
-				case "523":
-					return 'Origin Is Unreachable';
+				523 => 'Origin Is Unreachable',
 
 				// System was able to complete a TCP connection to the origin server, but did not receive a timely HTTP response
-				case "524":
-					return 'A Timeout Occurred';
-			endswitch;
+				524 => 'A Timeout Occurred'
+			};
+
+			// Return message and if does not exists then return $code
+			return $message ?? (string)$code;
 		endif;
 
 		return '';
