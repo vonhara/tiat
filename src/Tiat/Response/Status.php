@@ -71,7 +71,8 @@ class Status {
 	 */
 	final public static function getResponse(int $code = 0) : string {
 		if($code > 0):
-			$message = match ($code) {
+			// Return message and if does not exists then return $code
+			return match ($code) {
 				// Standard response for successful HTTP requests.
 				200 => 'OK',
 
@@ -144,13 +145,13 @@ class Status {
 				523 => 'Origin Is Unreachable',
 
 				// System was able to complete a TCP connection to the origin server, but did not receive a timely HTTP response
-				524 => 'A Timeout Occurred'
-			};
+				524 => 'A Timeout Occurred',
 
-			// Return message and if does not exists then return $code
-			return $message ?? (string)$code;
+				// Default is the code
+				default => (string)$code
+			};
 		endif;
 
-		return '';
+		return (string)$code;
 	}
 }
