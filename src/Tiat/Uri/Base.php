@@ -37,14 +37,14 @@ use function substr;
  * @package Tiat\Uri
  */
 class Base {
-
+	
 	// Declare constants
 	public const SCHEME_HTTP  = 'http';
 	public const SCHEME_HTTPS = 'https';
-
+	
 	//
 	private string $_requestUri;
-
+	
 	/**
 	 * @param    null|string    $uri
 	 *
@@ -53,7 +53,7 @@ class Base {
 	final public function factory(string $uri = NULL) : array {
 		return $this->getUriArray($uri);
 	}
-
+	
 	/**
 	 * @param    null|string    $uri
 	 *
@@ -66,10 +66,10 @@ class Base {
 				$val = urldecode($val);
 			endforeach;
 		endif;
-
+		
 		return $result;
 	}
-
+	
 	/**
 	 * Get URI
 	 *
@@ -80,20 +80,20 @@ class Base {
 	final public function getUri(string $uri = NULL) : string {
 		//
 		$uri = $uri ?? $this->getRequestUri();
-
+		
 		//
 		if($uri[0] === DIRECTORY_SEPARATOR):
 			$uri = substr($uri, 1);
 		endif;
-
+		
 		//
 		if(str_contains($uri, '?')):
 			$uri = substr($uri, 0, strpos($uri, '?'));
 		endif;
-
+		
 		return $uri;
 	}
-
+	
 	/**
 	 * Get Request URI
 	 *
@@ -105,10 +105,10 @@ class Base {
 		if(empty($this->_requestUri)):
 			$this->_setRequestUri($uri);
 		endif;
-
+		
 		return $this->_requestUri;
 	}
-
+	
 	/**
 	 * @param    null|string    $requestUri
 	 *
@@ -126,10 +126,10 @@ class Base {
 			elseif(isset($_SERVER['REQUEST_URI'])):
 				//
 				$requestUri = $_SERVER['REQUEST_URI'];
-
+				
 				// HTTP proxy reqs setup request uri with scheme and host [and port] + the url path, only use url path
 				$schemeAndHttpHost = $this->getScheme() . '://' . $this->getHttpHost();
-
+				
 				//
 				if(str_starts_with($requestUri, $schemeAndHttpHost)):
 					$requestUri = substr($requestUri, strlen($schemeAndHttpHost));
@@ -137,7 +137,7 @@ class Base {
 			elseif(isset($_SERVER['ORIG_PATH_INFO'])):
 				// PHP as CGI & older IIS
 				$requestUri = $_SERVER['ORIG_PATH_INFO'];
-
+				
 				if(! empty($_SERVER['QUERY_STRING'])):
 					$requestUri .= '?' . $_SERVER['QUERY_STRING'];
 				endif;
@@ -148,20 +148,20 @@ class Base {
 			return $this;
 		else:
 			// Set GET items, if available
-			if(FALSE !== ($pos = strpos($requestUri, '?'))):
+			if(FALSE !== ( $pos = strpos($requestUri, '?') )):
 				// Get key => value pairs and set $_GET
 				$query = substr($requestUri, $pos + 1);
 				parse_str($query, $vars);
 				$this->getQuery($vars);
 			endif;
 		endif;
-
+		
 		//
 		$this->_requestUri = $requestUri;
-
+		
 		return $this;
 	}
-
+	
 	/**
 	 * Get PATH from uri (everything between server name & '?')
 	 *
@@ -171,16 +171,16 @@ class Base {
 	 */
 	final public function getPath(string $uri = NULL) : string {
 		$u = $this->getRequestUri($uri);
-
+		
 		if(str_contains($u, '?')):
 			$path = substr($u, 0, strpos($u, '?'));
 		else:
 			$path = $u;
 		endif;
-
+		
 		return $path ?? '';
 	}
-
+	
 	/**
 	 * Get query params in array
 	 *
@@ -190,18 +190,18 @@ class Base {
 	 */
 	final public function getQueryArray(string $uri = NULL) : array {
 		$query = $this->getQuery($uri);
-
+		
 		// Parse to key/value
 		parse_str($query, $result);
-
+		
 		// Return validated array
 		if(count($resultset = $this->_validateQuery($result))):
 			return $resultset;
 		endif;
-
+		
 		return [];
 	}
-
+	
 	/**
 	 * Get query string (everything after '?')
 	 *
@@ -214,10 +214,10 @@ class Base {
 			$uri = $this->getRequestUri($uri);
 			$uri = substr($uri, strpos($uri, '?') + 1);
 		endif;
-
+		
 		return substr($uri, strpos($uri, '?'));
 	}
-
+	
 	/**
 	 * @param    array    $array
 	 *
@@ -227,7 +227,7 @@ class Base {
 		if(! empty($array)):
 			foreach($array as $key => $val):
 				$k = $this->_validate($key);
-
+				
 				if(is_array($val)):
 					foreach($val as $val2):
 						$v[] = $this->_validate($val2);
@@ -235,23 +235,23 @@ class Base {
 				else:
 					$v = $this->_validate($val);
 				endif;
-
+				
 				// Do not allow null values
 				if(! empty($k) && ! empty($v)):
 					$result[$k] = $v;
 				endif;
-
+				
 				unset($k, $v);
 			endforeach;
-
+			
 			if(isset($result)):
 				return $result;
 			endif;
 		endif;
-
+		
 		return [];
 	}
-
+	
 	/**
 	 * Check query values
 	 *
@@ -263,19 +263,19 @@ class Base {
 		if(is_scalar($value) && ! empty($value)):
 			return (string)$value;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * Get the request URI scheme
 	 *
 	 * @return string
 	 */
 	#[Pure] final public function getScheme() : string {
-		return ($this->getServer('HTTPS') === 'on') ? self::SCHEME_HTTPS : self::SCHEME_HTTP;
+		return ( $this->getServer('HTTPS') === 'on' ) ? self::SCHEME_HTTPS : self::SCHEME_HTTP;
 	}
-
+	
 	/**
 	 * Retrieve a member of the $_SERVER superglobal
 	 * If no $key is passed, returns the entire $_SERVER array.
@@ -289,11 +289,11 @@ class Base {
 		if(NULL === $key):
 			return $_SERVER;
 		endif;
-
+		
 		//
 		return $_SERVER[$key] ?? $default;
 	}
-
+	
 	/**
 	 * Get the HTTP host.
 	 * "Host" ":" host [ ":" port ]
@@ -304,24 +304,25 @@ class Base {
 	 */
 	#[Pure] final public function getHttpHost() : string {
 		$host = $this->getServer('HTTP_HOST');
-
+		
 		if(! empty($host)):
 			return $host;
 		endif;
-
+		
 		$scheme = $this->getScheme();
 		$name   = $this->getServer('SERVER_NAME');
 		$port   = $this->getServer('SERVER_PORT');
-
+		
 		if(NULL === $name):
 			return '';
-		elseif(($scheme === self::SCHEME_HTTP && $port === 80) || ($scheme === self::SCHEME_HTTPS && $port === 443)):
+		elseif(( $scheme === self::SCHEME_HTTP && $port === 80 ) ||
+		       ( $scheme === self::SCHEME_HTTPS && $port === 443 )):
 			return $name;
 		else:
 			return $name . ':' . $port;
 		endif;
 	}
-
+	
 	/**
 	 * @param    null|string    $host
 	 *
@@ -331,12 +332,12 @@ class Base {
 		// This will work ONLY with TOP-LEVEL domains
 		// So example www.your-domain.co.uk will return UK (not co.uk)
 		// Working with gTLD + sTLD + ccTLD
-		if(! (new Network())->valid4($host, TRUE)):
+		if(! ( new Network() )->valid4($host, TRUE)):
 			if(! empty($tmp = array_reverse(explode('.', $host)))):
 				return $tmp[0] ?? '';
 			endif;
 		endif;
-
+		
 		return '';
 	}
 }

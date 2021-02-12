@@ -27,21 +27,21 @@ namespace Tiat\Core\Filter\Validate;
  * @package Tiat\Core\Filter\Validate
  */
 interface Adapter {
-
+	
 	/**
 	 * Validate
 	 *
 	 * @return bool
 	 */
 	public function isValid() : bool;
-
+	
 	/**
 	 * Get messages from Validator
 	 *
 	 * @return mixed
 	 */
 	public function getMessages() : mixed;
-
+	
 	/**
 	 * Get errors
 	 *

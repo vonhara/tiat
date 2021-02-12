@@ -29,7 +29,7 @@ use Exception;
  * @package Tiat\Core\Filter\Validate
  */
 class File {
-
+	
 	/**
 	 * @param    null    $value
 	 *
@@ -42,7 +42,7 @@ class File {
 			throw new Exception($e);
 		}
 	}
-
+	
 	/**
 	 * @param    string    $filename
 	 *
@@ -57,7 +57,7 @@ class File {
 		} catch(Exception $e) {
 			throw new Exception('Filename check: illegal charecter in filename (' . $filename . ') [' . $e . ']');
 		}
-
+		
 		return FALSE;
 	}
 }

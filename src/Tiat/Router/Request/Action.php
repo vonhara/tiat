@@ -30,7 +30,7 @@ use function method_exists;
  * @package Tiat\Router\Request
  */
 class Action extends Base {
-
+	
 	/**
 	 * @param    string    $action
 	 *
@@ -41,18 +41,18 @@ class Action extends Base {
 		if(method_exists($this, 'preDispatch')):
 			$this->preDispatch();
 		endif;
-
+		
 		// Call controller action
 		$this->_dispatchAction($action);
-
+		
 		// Call controller postDispatch
 		if(method_exists($this, 'postDispatch')):
 			$this->postDispatch();
 		endif;
-
+		
 		return $this;
 	}
-
+	
 	/**
 	 * This method is executed before the action
 	 * Notice! This method can be overridded by Controller
@@ -61,7 +61,7 @@ class Action extends Base {
 	 */
 	public function preDispatch() : void {
 	}
-
+	
 	/**
 	 * @param    string    $action
 	 *
@@ -72,10 +72,10 @@ class Action extends Base {
 		if(! empty($action) && method_exists($this, $action)):
 			$this->$action();
 		endif;
-
+		
 		return $this;
 	}
-
+	
 	/**
 	 * This method is executed after the action
 	 * Notice! This method can be overridden by Controller
@@ -84,7 +84,7 @@ class Action extends Base {
 	 */
 	public function postDispatch() : void {
 	}
-
+	
 	/**
 	 * Prevent cloning
 	 */

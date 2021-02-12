@@ -41,10 +41,10 @@ use function substr;
  * @package Tiat\Core
  */
 class Loader {
-
+	
 	private $_loaded    = [];
 	private $_extension = [];
-
+	
 	/**
 	 * @param    null|string    $class
 	 * @param    null|mixed     $dirs
@@ -56,15 +56,15 @@ class Loader {
 		if($dirs === NULL):
 			$dirs = PATH_BASE;
 		endif;
-
+		
 		// Set filename without extension
 		$file = str_replace('_', DIRECTORY_SEPARATOR, $class);
-
+		
 		// Replace the namespace '\' with directory separator
 		if(str_contains($file, '\\')):
 			$file = str_replace('\\', DIRECTORY_SEPARATOR, $file);
 		endif;
-
+		
 		// Set dirs to array (add NULL if namespace not defined)
 		// Include the include_path to end of the array (if file not found then try include_path)
 		if(dirname($file) === '.'):
@@ -74,26 +74,26 @@ class Loader {
 			$dirs = $this->_setDir($dirs, dirname($file));
 			$dirs = array_merge($dirs, $this->_mergeIncludePath($file));
 		endif;
-
+		
 		// Remove duplicates
 		$dirs = array_unique($dirs);
-
+		
 		// Check filename
 		$filename = PATH_CORE . 'Core' . DIRECTORY_SEPARATOR . 'Filter' . DIRECTORY_SEPARATOR . 'Validate' .
 		            DIRECTORY_SEPARATOR . 'File.php';
-
+		
 		if($this->_isLoaded('\Tiat\Core\Filter\Validate\File') || require_once $filename):
 			//
 			$this->_setLoaded('\Tiat\Core\Filter\Validate\File', $filename);
-
+			
 			if(File::checkFilename($filename)):
 				return $this->loadFile(basename($file), $dirs, TRUE);
 			endif;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * @param    mixed     $dirs
 	 * @param    string    $dirname
@@ -105,14 +105,14 @@ class Loader {
 		if($dirs === NULL):
 			// Get dirs from include_path
 			$path = ini_get('include_path');
-
+			
 			// Remove point (.) if exists (usually does in *nix enviroment)
 			if(str_starts_with($path, ".:")):
 				$path = substr($path, 2);
 			elseif($path[0] === "."):
 				$path = substr($path, 1);
 			endif;
-
+			
 			// Explode path
 			$dirs = explode(':', $path);
 		else:
@@ -127,16 +127,16 @@ class Loader {
 				if(substr($val, -1) !== DIRECTORY_SEPARATOR):
 					$val .= DIRECTORY_SEPARATOR;
 				endif;
-
+				
 				// Set new directory name
 				$dirs[$key] = $val . $dirname;
 			endforeach;
 		endif;
-
+		
 		// Return dirs in array
 		return $dirs;
 	}
-
+	
 	/**
 	 * @param    null|string|array    $file
 	 *
@@ -148,12 +148,12 @@ class Loader {
 			// The last section is used to point to FILENAME with extension
 			// Explode the name
 			$exploded = explode(DIRECTORY_SEPARATOR, $file);
-
+			
 			// Remove last section
 			if(is_array($exploded) && count($exploded) > 1):
 				array_pop($exploded);
 			endif;
-
+			
 			$file = implode(DIRECTORY_SEPARATOR, $exploded);
 		endif;
 		if(! empty($include = $this->_setDir())):
@@ -161,16 +161,16 @@ class Loader {
 				if($val[strlen($val) - 1] !== DIRECTORY_SEPARATOR):
 					$val .= DIRECTORY_SEPARATOR;
 				endif;
-
+				
 				$val .= $file;
 			endforeach;
-
+			
 			return $include;
 		endif;
-
+		
 		return [];
 	}
-
+	
 	/**
 	 * Test if class is already loaded
 	 *
@@ -185,10 +185,10 @@ class Loader {
 		elseif(is_string($filename) && ! empty($filename)):
 			return in_array($filename, $this->_loaded, TRUE);
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * @param    null|string    $name
 	 *
@@ -200,10 +200,10 @@ class Loader {
 				return substr($name, 1);
 			endif;
 		endif;
-
+		
 		return $name;
 	}
-
+	
 	/**
 	 * Try prevent double loading with this function with minimal cost
 	 *
@@ -216,10 +216,10 @@ class Loader {
 			$class                 = $this->_checkLoader($class);
 			$this->_loaded[$class] = $filename;
 		endif;
-
+		
 		return;
 	}
-
+	
 	/**
 	 * @param    string    $file
 	 * @param    array     $dirs
@@ -234,10 +234,10 @@ class Loader {
 				if(substr($val, -1) !== DIRECTORY_SEPARATOR):
 					$val .= DIRECTORY_SEPARATOR;
 				endif;
-
+				
 				// Connect dir + filename
 				$filename = $val . $file;
-
+				
 				// Try all file extensions
 				foreach($this->_getFileExtension() as $extension):
 					$loadfile = $filename . '.' . $extension;
@@ -249,17 +249,17 @@ class Loader {
 								require_once $loadfile;
 							endif;
 						endif;
-
+						
 						// Return true
 						return TRUE;
 					endif;
 				endforeach;
 			endforeach;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * Get available file extension(s)
 	 *
@@ -269,10 +269,10 @@ class Loader {
 		if(count($this->_extension) < 1):
 			$this->setFileExtension();
 		endif;
-
+		
 		return $this->_extension;
 	}
-
+	
 	/**
 	 * Set file extension(s) for Autoload
 	 * Notice! Keep this list as short as possible
@@ -285,7 +285,7 @@ class Loader {
 		else:
 			$this->_extension = $list;
 		endif;
-
+		
 		return;
 	}
 }

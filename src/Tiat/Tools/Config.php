@@ -41,10 +41,10 @@ use function substr;
  * @package Tiat\Tools
  */
 class Config {
-
+	
 	//
 	protected array $_config;    // Config values if already read at least once
-
+	
 	/**
 	 * Config constructor.
 	 *
@@ -57,10 +57,10 @@ class Config {
 			//
 			$this->readConfig($key, $server, $module);
 		endif;
-
+		
 		return;
 	}
-
+	
 	/**
 	 * @param    null|string    $key
 	 * @param    null|string    $server
@@ -71,16 +71,16 @@ class Config {
 	public function readConfig(string $key = NULL, string $server = NULL, string $module = NULL) : array {
 		if(empty($this->_config)):
 			// Check server var
-			$server = ($server ?? $_SERVER['SERVER_NAME']);
-
+			$server = ( $server ?? $_SERVER['SERVER_NAME'] );
+			
 			// Resolve config path from server name
 			if(! empty($path = $this->_resolveConfigPath($server))):
 				// Config file is in 'config' dir so add it to PATH
 				$config = $path . 'config' . DIRECTORY_SEPARATOR;
-
+				
 				// Read config file & detect re-route if exists before anything else
 				$conf = $this->_getIni($key, $config, TRUE, $module);
-
+				
 				// Re-route application
 				if(isset($conf['router']['reroute']) && strlen($conf['router']['reroute']) > 1):
 					//
@@ -91,30 +91,30 @@ class Config {
 						$config = $t2;
 					endif;
 				endif;
-
+				
 				// Define application PATH & add it to include path
 				if(! defined('PATH_APPS')):
 					define('PATH_APPS', $path);
 					// Add path apps to include path
 					ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . PATH_APPS);
 				endif;
-
+				
 				// If not defined config path then do it
 				if(! defined('PATH_CONFIG')):
 					define('PATH_CONFIG', $config);
 				endif;
-
+				
 				// Read local config file
 				$this->_config = $this->_getIni($key, $config, TRUE, $module);
-
+				
 				// Validate boolean values to boolean (not as string)
 				$this->_config = $this->_checkConfig($this->_config);
 			endif;
 		endif;
-
+		
 		return $this->_config;
 	}
-
+	
 	/**
 	 * @param    string    $server
 	 *
@@ -124,14 +124,14 @@ class Config {
 		if(! defined('PATH_APPS') && $server):
 			//
 			$tld = $this->_getDomainTld($server);
-
+			
 			// Resolve path with domain name without TLD
 			$server = substr($server, 0, strlen($server) - strlen($tld));
 			$params = array_reverse(explode('.', strtolower($server)));
-
+			
 			// Modify TLD (remove points)
 			$tld = str_replace('.', '', $tld);
-
+			
 			// If there is only domain name (no server name like 'www') then use TLD value without points
 			// domain.com = /path/to/your/apps/domain/com/
 			if(count($params) === 1):
@@ -142,18 +142,18 @@ class Config {
 				$counter = count($params);
 				do {
 					$path = PATH_BASE . 'apps' . DIRECTORY_SEPARATOR . $this->_resolvePath($params, $counter);
-
+					
 					// Add TLD to $path when counter is 1 (only the domain name exists)
 					if($counter <= 1):
-						$path .= ($tld ?? '') . DIRECTORY_SEPARATOR;
+						$path .= ( $tld ?? '' ) . DIRECTORY_SEPARATOR;
 					endif;
-
+					
 					// 'config' dir must exists for application
 					// Otherwise with multiple application subdirectory will always reroute to "no application"
 					if(file_exists($path . 'config' . DIRECTORY_SEPARATOR)):
 						break;
 					endif;
-
+					
 					$counter--;
 				} while($counter >= 1);
 			endif;
@@ -161,14 +161,14 @@ class Config {
 			if(! file_exists($path)):
 				$path = PATH_BASE . 'apps' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR;
 			endif;
-
+			
 			//
 			return $path;
 		endif;
-
+		
 		return PATH_APPS ?? '';
 	}
-
+	
 	/**
 	 * @param    string    $server
 	 *
@@ -176,9 +176,9 @@ class Config {
 	 */
 	protected function _getDomainTld(string $server) : string {
 		// Get URI & resolve TLD
-		return (string)(new Base())->getDomainTld($server);
+		return (string)( new Base() )->getDomainTld($server);
 	}
-
+	
 	/**
 	 * Sub-function for _resolveConfigPath()
 	 *
@@ -191,27 +191,27 @@ class Config {
 		if(! empty($array) && $loops):
 			$counter = 0;
 			$path    = '';
-
+			
 			foreach($array as $val):
 				$path .= $val . DIRECTORY_SEPARATOR;
 				$counter++;
-
+				
 				if($counter >= $loops):
 					break;
 				endif;
 			endforeach;
-
+			
 			return $path;
 		endif;
-
+		
 		return '';
 	}
-
+	
 	/**
-	 * @param    string    $filename
-	 * @param    string    $path
-	 * @param    bool      $sections
-	 * @param    string    $module
+	 * @param    null|string    $filename
+	 * @param    null|string    $path
+	 * @param    bool           $sections
+	 * @param    null|string    $module
 	 *
 	 * @return  array
 	 */
@@ -223,15 +223,15 @@ class Config {
 			else:
 				$file = $path . $filename . '.ini';
 			endif;
-
+			
 			if(file_exists($file)):
 				return parse_ini_file($file, $sections, INI_SCANNER_TYPED);
 			endif;
 		endif;
-
+		
 		return [];
 	}
-
+	
 	/**
 	 * Re-route application to other application source
 	 *
@@ -245,24 +245,24 @@ class Config {
 			if($name[0] === DIRECTORY_SEPARATOR):
 				$name = substr($name, 1);
 			endif;
-
+			
 			if(substr($name, -1) === DIRECTORY_SEPARATOR):
-				$name = substr($name, 0, (strlen($name) - 1));
+				$name = substr($name, 0, ( strlen($name) - 1 ));
 			endif;
-
+			
 			// Set path
 			$path = PATH_BASE . 'apps' . DIRECTORY_SEPARATOR . $name . DIRECTORY_SEPARATOR;
-
+			
 			// Return both PATH_APPS & PATH_CONFIG variables
 			if(file_exists($path)):
 				return [$path, $path . 'config' . DIRECTORY_SEPARATOR];
 			endif;
 		endif;
-
+		
 		//
 		return ['', ''];
 	}
-
+	
 	/**
 	 * Check config boolean values (true/false strings)
 	 *
@@ -284,10 +284,10 @@ class Config {
 				endif;
 			endforeach;
 		endif;
-
+		
 		return $params;
 	}
-
+	
 	/**
 	 * Get param(s) from config
 	 *

@@ -30,10 +30,10 @@ use Exception;
  * @package Tiat\Router\Request
  */
 class Request {
-
+	
 	//
 	private array $_privateParams;
-
+	
 	/**
 	 * @param $name
 	 *
@@ -44,7 +44,7 @@ class Request {
 			return $this->_privateParams[$name];
 		endif;
 	}
-
+	
 	/**
 	 * @param $key
 	 * @param $value
@@ -53,10 +53,10 @@ class Request {
 	 */
 	final public function __set($key, $value) : void {
 		$this->_privateParams[$key] = $value;
-
+		
 		return;
 	}
-
+	
 	/**
 	 * @param $name
 	 *

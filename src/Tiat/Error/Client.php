@@ -27,10 +27,21 @@ namespace Tiat\Error;
  * @package Tiat\Error
  */
 trait Client {
-
+	
 	//
 	protected array $_errorMessages;
-
+	
+	/**
+	 * @return array
+	 */
+	public function getErrors() : array {
+		if(! empty($this->_errorMessages)):
+			return $this->_errorMessages;
+		endif;
+		
+		return [];
+	}
+	
 	/**
 	 * Set error message
 	 *
@@ -41,7 +52,7 @@ trait Client {
 		if(! empty($msg)):
 			$this->_errorMessages[] = ['msg' => $msg, 'code' => $code];
 		endif;
-
+		
 		return;
 	}
 }

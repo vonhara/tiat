@@ -31,7 +31,7 @@ use function in_array;
  * @package Tiat\Core\Filter\Validate
  */
 class Values extends Base {
-
+	
 	/**
 	 * Values constructor.
 	 *
@@ -40,7 +40,7 @@ class Values extends Base {
 	public function __construct($options = []) {
 		$this->_setOptions($options);
 	}
-
+	
 	/**
 	 * @param    null    $value
 	 *
@@ -49,7 +49,7 @@ class Values extends Base {
 	public function isValid($value = NULL) : bool {
 		return $this->_checkValues($value);
 	}
-
+	
 	/**
 	 * @param $value
 	 *
@@ -59,11 +59,11 @@ class Values extends Base {
 		if(isset($this->_options['accept']) && count($this->_options['accept'])):
 			if(! in_array($value, $this->_options['accept'], TRUE)):
 				$this->_setError('Value not accepted (' . $value . ')');
-
+				
 				return FALSE;
 			endif;
 		endif;
-
+		
 		return TRUE;
 	}
 }

@@ -31,10 +31,10 @@ use Tiat\Core\Filter\Validate\Base;
  * @package Tiat\Core\Filter
  */
 class Validate extends Base {
-
+	
 	//
 	private $_validators = NULL;        // Validators to be used
-
+	
 	/**
 	 * Add new validator
 	 *
@@ -45,10 +45,10 @@ class Validate extends Base {
 	 */
 	public function addValidator(Adapter $instance, $breakOnFailure = FALSE) : self {
 		$this->_validators[] = ['instance' => $instance, 'breakOnFailure' => (boolean)$breakOnFailure,];
-
+		
 		return $this;
 	}
-
+	
 	/**
 	 * @param    mixed    $value
 	 *
@@ -59,7 +59,7 @@ class Validate extends Base {
 		$this->_messages = NULL;
 		$this->_errors   = NULL;
 		$result          = TRUE;
-
+		
 		foreach($this->_validators as $validator):
 			if($validator['instance']->isValid($value)):
 				continue;
@@ -67,17 +67,17 @@ class Validate extends Base {
 				$this->_errors   = $validator['instance']->getErrors();
 				$this->_messages = $validator['instance']->getMessages();
 			endif;
-
+			
 			// Validator(s) not passed
 			// Set return value to false
 			$result = FALSE;
-
+			
 			// Get messages & break (if "Break-On-Failure" is true)
 			if($validator['breakOnFailure']):
 				break;
 			endif;
 		endforeach;
-
+		
 		return (bool)$result;
 	}
 }

@@ -40,7 +40,7 @@ use function trim;
  * @package Tiat\Tools
  */
 class Network {
-
+	
 	/**
 	 * Detect client IP, return IP address
 	 *
@@ -56,10 +56,10 @@ class Network {
 		else:
 			$ip = $this->getServer('REMOTE_ADDR');
 		endif;
-
+		
 		return $ip;
 	}
-
+	
 	/**
 	 * Retrieve a member of the $_SERVER superglobals
 	 * If no $key is passed, returns the entire $_SERVER array.
@@ -73,10 +73,10 @@ class Network {
 		if(NULL === $key):
 			return $_SERVER;
 		endif;
-
+		
 		return $_SERVER[$key] ?? $default;
 	}
-
+	
 	/**
 	 * Convert IP to integer. IP can be IPv4 or IPv6
 	 *
@@ -87,24 +87,24 @@ class Network {
 	 * @return null|array|string
 	 */
 	final public function convertToInteger(string $ip, bool $private = TRUE, bool $string = FALSE) : array|string|null {
-		if($private || (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE))):
+		if($private || ( filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE) )):
 			// Private networks allowed? If not then add 'FILTER_FLAG_NO_PRIV_RANGE'
 			if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)):
 				$result = $this->convert4($ip);
 			elseif(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)):
 				$result = $this->convert6($ip);
 			endif;
-
+			
 			if($string && isset($result) && is_array($result)):
 				return implode('', $result);
 			else:
 				return $result ?? NULL;
 			endif;
 		endif;
-
+		
 		return NULL;
 	}
-
+	
 	/**
 	 * Convert IPv4 to integer
 	 *
@@ -116,10 +116,10 @@ class Network {
 		if($ip !== NULL):
 			return [ip2long($ip)];
 		endif;
-
+		
 		return NULL;
 	}
-
+	
 	/**
 	 * Convert IPv6 to 2 INT64 blocks
 	 *
@@ -132,17 +132,17 @@ class Network {
 			if(strlen($ip) !== 39):
 				$ip = $this->ipv6Expand($ip);
 			endif;
-
+			
 			$ip      = str_replace(':', '', $ip);
 			$part[0] = gmp_strval('0x' . substr($ip, 0, 16));
 			$part[1] = gmp_strval('0x' . substr($ip, 16));
-
+			
 			return [$part[0], $part[1]];
 		endif;
-
+		
 		return NULL;
 	}
-
+	
 	/**
 	 * Return the expanded IPv6 in correct format with leading zeros
 	 *
@@ -154,20 +154,20 @@ class Network {
 		if($ip !== NULL):
 			$ip     = trim($ip);
 			$length = strlen($ip);
-
+			
 			if($length > 0 && $length <= 39):
 				$array = explode(':', $ip);
 				foreach($array as &$val):
 					$val = str_pad($val, 4, '0', STR_PAD_LEFT);
 				endforeach;
 			endif;
-
+			
 			return implode(':', $array);
 		endif;
-
+		
 		return NULL;
 	}
-
+	
 	/**
 	 * Validate IP address
 	 *
@@ -180,10 +180,10 @@ class Network {
 		if(! $result = $this->valid4($ip, $private)):
 			$result = $this->valid6($ip, $private);
 		endif;
-
+		
 		return $result;
 	}
-
+	
 	/**
 	 * Validate IPv4. If $private is TRUE then private addresses also accepted
 	 *
@@ -200,10 +200,10 @@ class Network {
 				return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_NO_PRIV_RANGE);
 			endif;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * Validate IPv6
 	 *
@@ -220,10 +220,10 @@ class Network {
 				return filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6 | FILTER_FLAG_NO_PRIV_RANGE);
 			endif;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * Return integer to IPv4
 	 *
@@ -235,10 +235,10 @@ class Network {
 		if($value !== NULL):
 			return long2ip($value);
 		endif;
-
+		
 		return NULL;
 	}
-
+	
 	/**
 	 * Convert INT64 blocks to valid IPv6 address
 	 *
@@ -255,28 +255,28 @@ class Network {
 			$address = $p1 . $p2;
 			$counter = 0;
 			$result  = "";
-
+			
 			//
 			while(1):
 				if($counter > 0):
 					$result .= ':';
 				endif;
-
+				
 				$result .= substr($address, $counter * 4, 4);
 				$counter++;
-
+				
 				if($counter >= 8):
 					break;
 				endif;
 			endwhile;
-
+			
 			// Return valid IPv6 address
 			return inet_ntop(inet_pton($result));
 		endif;
-
+		
 		return NULL;
 	}
-
+	
 	/**
 	 * @param    string    $val
 	 *

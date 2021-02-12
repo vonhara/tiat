@@ -27,7 +27,7 @@ namespace Tiat\Core\Filter\Validate;
  * @package Tiat\Core\Filter\Validate
  */
 class Length extends Base {
-
+	
 	/**
 	 * Length constructor.
 	 *
@@ -36,7 +36,7 @@ class Length extends Base {
 	public function __construct($options = []) {
 		$this->_setOptions($options);
 	}
-
+	
 	/**
 	 * @param    null    $value
 	 *
@@ -46,10 +46,10 @@ class Length extends Base {
 		if($this->_checkMin($value)):
 			return $this->_checkMax($value);
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * @param    string    $value
 	 *
@@ -58,13 +58,13 @@ class Length extends Base {
 	private function _checkMin(string $value) : bool {
 		if(isset($this->_options['min']) && strlen($value) < (integer)$this->_options['min']):
 			$this->_setError('Length check: value is too short (' . $value . ')');
-
+			
 			return FALSE;
 		endif;
-
+		
 		return TRUE;
 	}
-
+	
 	/**
 	 * @param    string    $value
 	 *
@@ -73,10 +73,10 @@ class Length extends Base {
 	private function _checkMax(string $value) : bool {
 		if(isset($this->_options['max']) && strlen($value) > (integer)$this->_options['max']):
 			$this->_setError('Length check: value is too long (' . $value . ')');
-
+			
 			return FALSE;
 		endif;
-
+		
 		return TRUE;
 	}
 }

@@ -39,14 +39,14 @@ use function strtoupper;
  * @package Tiat\Core
  */
 class Bootstrap {
-
+	
 	//
 	protected object $_router;
-
+	
 	//
 	private        $_autoload;
 	private object $_loader;    // MVC Router instance
-
+	
 	/**
 	 * Bootstrap constructor.
 	 *
@@ -57,7 +57,7 @@ class Bootstrap {
 			$this->setIni($ini);
 		endif;
 	}
-
+	
 	/**
 	 * Set PHP ini params
 	 *
@@ -72,20 +72,20 @@ class Bootstrap {
 					ini_set($key, $val);
 				endif;
 			endforeach;
-
+			
 			return TRUE;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * Custom destruct
 	 */
 	final static public function destruct() : void {
 		return;
 	}
-
+	
 	/**
 	 * Define path constants & set them to include path
 	 *
@@ -99,13 +99,13 @@ class Bootstrap {
 			foreach($path as $key => $val):
 				$this->_definePath($key, $base . $val);
 			endforeach;
-
+			
 			return TRUE;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * @param    string    $name
 	 * @param    string    $path
@@ -115,24 +115,24 @@ class Bootstrap {
 	private function _definePath(string $name, string $path) : bool {
 		// Set vars
 		$name = 'PATH_' . strtoupper($name);
-
+		
 		if($path[strlen($path) - 1] !== DIRECTORY_SEPARATOR):
 			$path .= DIRECTORY_SEPARATOR;
 		endif;
-
+		
 		if(file_exists($path)):
 			if(! defined($name)):
 				define($name, $path);
 			endif;
-
+			
 			if(! str_contains(ini_get('include_path'), $path)):
 				ini_set('include_path', ini_get('include_path') . PATH_SEPARATOR . $path);
 			endif;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * @return bool
 	 * @throws Exception
@@ -142,7 +142,7 @@ class Bootstrap {
 		if($this->_setAutoload()):
 			//
 			$this->_router = new Route();
-
+			
 			//
 			return TRUE;
 		else:
@@ -151,7 +151,7 @@ class Bootstrap {
 			throw new Error('Oh my...there are no autoloader. Try fix it.');
 		endif;
 	}
-
+	
 	/**
 	 * @return  bool
 	 * @throws  Exception
@@ -160,22 +160,22 @@ class Bootstrap {
 		if(empty($this->_autoload)):
 			// Load Autoload file
 			$filename = PATH_CORE . 'Core' . DIRECTORY_SEPARATOR . 'Autoload.php';
-
+			
 			if(file_exists($filename)):
 				require_once $filename;
 				$this->_loader = new Autoload();
 			else:
 				throw new Exception('Autoloader does not exists');
 			endif;
-
+			
 			// Set autoloader status
-			$this->_autoload = ($this->_loader instanceof Autoload);
+			$this->_autoload = ( $this->_loader instanceof Autoload );
 		endif;
-
+		
 		//
 		return $this->_autoload;
 	}
-
+	
 	/**
 	 * Factory & execute router + application
 	 */
@@ -189,7 +189,7 @@ class Bootstrap {
 		else:
 			throw new Error('Router is not a correct instance');
 		endif;
-
+		
 		return;
 	}
 }

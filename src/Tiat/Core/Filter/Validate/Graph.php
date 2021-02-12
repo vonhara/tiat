@@ -27,7 +27,7 @@ namespace Tiat\Core\Filter\Validate;
  * @package Tiat\Core\Filter\Validate
  */
 class Graph extends Base {
-
+	
 	/**
 	 * Graph constructor.
 	 *
@@ -36,7 +36,7 @@ class Graph extends Base {
 	public function __construct($options = []) {
 		$this->_setOptions($options);
 	}
-
+	
 	/**
 	 * @param    null    $value
 	 *

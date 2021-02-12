@@ -28,7 +28,7 @@ use function file_exists;
 $filename = PATH_ROOT . 'Tiat' . DIRECTORY_SEPARATOR . 'Loader.php';
 if(file_exists($filename)):
 	require_once $filename;
-
+	
 	//
 	$loader = new Loader();
 	$loader->run(PATH_ROOT ?? DIRECTORY_SEPARATOR);

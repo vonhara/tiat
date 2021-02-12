@@ -27,11 +27,11 @@ namespace Tiat\Core\Filter\Validate;
  * @package Tiat\Core\Filter\Validate
  */
 class Between extends Base {
-
+	
 	public function __construct($options = []) {
 		$this->_setOptions($options);
 	}
-
+	
 	/**
 	 * @param    null    $value
 	 *
@@ -41,14 +41,14 @@ class Between extends Base {
 		if(! $this->_checkMin($value)):
 			return FALSE;
 		endif;
-
+		
 		if(! $this->_checkMax($value)):
 			return FALSE;
 		endif;
-
+		
 		return TRUE;
 	}
-
+	
 	/**
 	 * @param    int    $value
 	 *
@@ -58,14 +58,14 @@ class Between extends Base {
 		if(isset($this->_options['min'])):
 			if($value < (integer)$this->_options['min']):
 				$this->_setError('Between check: value is too short (' . $value . ')');
-
+				
 				return FALSE;
 			endif;
 		endif;
-
+		
 		return TRUE;
 	}
-
+	
 	/**
 	 * @param    int    $value
 	 *
@@ -75,11 +75,11 @@ class Between extends Base {
 		if(isset($this->_options['max'])):
 			if($value > (integer)$this->_options['max']):
 				$this->_setError('Between check: value is too long (' . $value . ')');
-
+				
 				return FALSE;
 			endif;
 		endif;
-
+		
 		return TRUE;
 	}
 }

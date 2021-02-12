@@ -42,7 +42,7 @@ endif;
 // Set base path
 // Sometimes framework has linked (ln -s...) from other base/root dir so this has been cut from $_SERVER vars
 $path1 = realpath(dirname(__FILE__) . DIRECTORY_SEPARATOR . '..') . DIRECTORY_SEPARATOR;
-$path2 = (dirname($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR);
+$path2 = ( dirname($_SERVER['DOCUMENT_ROOT']) . DIRECTORY_SEPARATOR );
 
 //
 if($path1 !== $path2):

@@ -32,11 +32,11 @@ use function ctype_alnum;
  * @package Tiat\Core\Filter\Validate
  */
 class Alnum extends Base {
-
+	
 	public function __construct($options = []) {
 		$this->_setOptions($options);
 	}
-
+	
 	/**
 	 * @param    null    $value
 	 *

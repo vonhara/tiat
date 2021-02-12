@@ -30,7 +30,7 @@ use Exception;
  * @package Tiat\Router\Request
  */
 class Dispatcher extends Base {
-
+	
 	/**
 	 * Dispatcher constructor.
 	 *
@@ -39,7 +39,7 @@ class Dispatcher extends Base {
 	 */
 	public function __construct(protected object $_controller, protected string $_action = '') {
 	}
-
+	
 	/**
 	 * @throws Exception
 	 */
@@ -48,10 +48,10 @@ class Dispatcher extends Base {
 			// Before the application
 			$this->dispatchStart();
 			$this->preDispatch();
-
+			
 			// Call application
 			$this->_controller->dispatch($this->_action);
-
+			
 			// After the application
 			$this->postDispatch();
 			$this->dispatchEnd();
@@ -59,31 +59,31 @@ class Dispatcher extends Base {
 			throw new Exception($e);
 		}
 	}
-
+	
 	/**
 	 * Dispatch start
 	 */
 	public function dispatchStart() : void {
 	}
-
+	
 	/**
 	 * Pre-dispatch before action
 	 */
 	public function preDispatch() : void {
 	}
-
+	
 	/**
 	 * Post dispatch after action
 	 */
 	public function postDispatch() : void {
 	}
-
+	
 	/**
 	 * End dispatching
 	 */
 	public function dispatchEnd() : void {
 	}
-
+	
 	/**
 	 * Prevent cloning
 	 */

@@ -27,13 +27,13 @@ namespace Tiat\Core\Filter\Validate;
  * @package Tiat\Core\Filter\Validate
  */
 abstract class Base implements Adapter {
-
+	
 	//
 	protected $_value    = NULL;
 	protected $_errors   = [];
 	protected $_messages = [];
 	protected $_options  = NULL;
-
+	
 	/**
 	 * @param    null    $value
 	 *
@@ -42,21 +42,21 @@ abstract class Base implements Adapter {
 	public function isValid($value = NULL) : bool {
 		return TRUE;
 	}
-
+	
 	/**
 	 * @return mixed
 	 */
 	public function getMessages() : mixed {
 		return $this->_messages;
 	}
-
+	
 	/**
 	 * @return mixed
 	 */
 	public function getErrors() : mixed {
 		return $this->_errors;
 	}
-
+	
 	/**
 	 * Set options for the validator
 	 *
@@ -68,10 +68,10 @@ abstract class Base implements Adapter {
 		if($options !== NULL):
 			$this->_options = $options;
 		endif;
-
+		
 		return;
 	}
-
+	
 	/**
 	 * Sets the value to be validated and clears the messages and errors arrays
 	 *
@@ -84,7 +84,7 @@ abstract class Base implements Adapter {
 		$this->_errors   = [];
 		$this->_messages = [];
 	}
-
+	
 	/**
 	 * Set error
 	 *
@@ -95,10 +95,10 @@ abstract class Base implements Adapter {
 	protected function _setError($error = NULL) : self {
 		$this->_errors[]   = $error;
 		$this->_messages[] = $error;
-
+		
 		return $this;
 	}
-
+	
 	/**
 	 * Set error message
 	 *
@@ -108,7 +108,7 @@ abstract class Base implements Adapter {
 	 */
 	protected function _setMessage($msg = NULL) : self {
 		$this->_messages[] = $msg;
-
+		
 		return $this;
 	}
 }

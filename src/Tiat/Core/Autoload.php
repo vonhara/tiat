@@ -34,17 +34,17 @@ use function spl_autoload_unregister;
  * @package Tiat\Core
  */
 class Autoload {
-
+	
 	//
 	private $_loader;
-
+	
 	/**
 	 *
 	 */
 	final public function __construct() {
 		$this->_registerAutoload(TRUE);
 	}
-
+	
 	/**
 	 * @param    bool    $status
 	 *
@@ -55,14 +55,14 @@ class Autoload {
 		if($status):
 			// Mofidy extension order
 			spl_autoload_extensions('.php');
-
+			
 			// Register class
 			return spl_autoload_register([__CLASS__, '_autoload'], TRUE, TRUE);
 		else:
 			return spl_autoload_unregister([__CLASS__, '_autoload']);
 		endif;
 	}
-
+	
 	/**
 	 * @param    string    $class
 	 *
@@ -79,11 +79,11 @@ class Autoload {
 				return $file ?? FALSE;
 			}
 		endif;
-
+		
 		// False on failure
 		return FALSE;
 	}
-
+	
 	/**
 	 * @return Loader|bool
 	 */
@@ -91,10 +91,10 @@ class Autoload {
 		if($this->_getLoaderStatus()):
 			return $this->_loader;
 		endif;
-
+		
 		return FALSE;
 	}
-
+	
 	/**
 	 * @return bool
 	 */
@@ -103,13 +103,13 @@ class Autoload {
 			// Set Loader filename & require it
 			$filename = PATH_CORE . 'Core' . DIRECTORY_SEPARATOR . 'Loader.php';
 			require_once $filename;
-
+			
 			//
 			$this->_loader = new Loader();
-
-			return ($this->_loader instanceof Loader);
+			
+			return ( $this->_loader instanceof Loader );
 		endif;
-
+		
 		return (bool)$this->_loader;
 	}
 }

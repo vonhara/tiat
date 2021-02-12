@@ -33,7 +33,7 @@ use function is_string;
  * @package Tiat\Core\Filter\Validate
  */
 class ScalarType extends Base {
-
+	
 	/**
 	 * ScalarType constructor.
 	 *
@@ -42,7 +42,7 @@ class ScalarType extends Base {
 	public function __construct($options = []) {
 		$this->_setOptions($options);
 	}
-
+	
 	/**
 	 * @param    null    $value
 	 *
@@ -52,22 +52,22 @@ class ScalarType extends Base {
 		if(! $this->_isString($value)):
 			return FALSE;
 		endif;
-
+		
 		if(! $this->_isInt($value)):
 			return FALSE;
 		endif;
-
+		
 		if(! $this->_isFloat($value)):
 			return FALSE;
 		endif;
-
+		
 		if(! $this->_isBool($value)):
 			return FALSE;
 		endif;
-
+		
 		return TRUE;
 	}
-
+	
 	/**
 	 * @param    string    $value
 	 *
@@ -77,14 +77,14 @@ class ScalarType extends Base {
 		if(isset($this->_options) && $this->_options === 'string'):
 			if(! is_string($value)):
 				$this->_setError('Value is not string');
-
+				
 				return FALSE;
 			endif;
 		endif;
-
+		
 		return TRUE;
 	}
-
+	
 	/**
 	 * @param    int    $value
 	 *
@@ -94,14 +94,14 @@ class ScalarType extends Base {
 		if(isset($this->_options) && $this->_options === 'int'):
 			if(! is_int($value)):
 				$this->_setError('Value is not int');
-
+				
 				return FALSE;
 			endif;
 		endif;
-
+		
 		return TRUE;
 	}
-
+	
 	/**
 	 * @param    float    $value
 	 *
@@ -111,14 +111,14 @@ class ScalarType extends Base {
 		if(isset($this->_options) && $this->_options === 'float'):
 			if(! is_float($value)):
 				$this->_setError('Value is not float');
-
+				
 				return FALSE;
 			endif;
 		endif;
-
+		
 		return TRUE;
 	}
-
+	
 	/**
 	 * @param    bool    $value
 	 *
@@ -128,11 +128,11 @@ class ScalarType extends Base {
 		if(isset($this->_options) && $this->_options === 'bool'):
 			if(! is_bool($value)):
 				$this->_setError('Value is not boolean');
-
+				
 				return FALSE;
 			endif;
 		endif;
-
+		
 		return TRUE;
 	}
 }
