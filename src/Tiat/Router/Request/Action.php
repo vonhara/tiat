@@ -32,7 +32,7 @@ use function method_exists;
 class Action extends Base {
 	
 	/**
-	 * @param    string    $action
+	 * @param    null|string    $action
 	 *
 	 * @return  self
 	 */
@@ -55,7 +55,7 @@ class Action extends Base {
 	
 	/**
 	 * This method is executed before the action
-	 * Notice! This method can be overridded by Controller
+	 * Notice! This method can be overridden by Controller
 	 *
 	 * @return  void
 	 */
