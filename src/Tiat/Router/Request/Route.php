@@ -57,11 +57,11 @@ class Route extends Request {
 	public const defaultAction     = 'index';
 	
 	// Name of
-	protected string $_nameNamespace  = self::defaultNamespace;
+	protected string $_nameNamespace = self::defaultNamespace;
 	protected string $_nameNamespaceRoot;
-	protected string $_nameModule     = self::defaultModule;
+	protected string $_nameModule = self::defaultModule;
 	protected string $_nameController = self::defaultController;
-	protected string $_nameAction     = self::defaultAction;
+	protected string $_nameAction = self::defaultAction;
 	// Directories
 	protected string $_dirNamespace;
 	protected string $_dirModule;
@@ -78,23 +78,24 @@ class Route extends Request {
 	protected Config $_config;
 	
 	// Router settings
-	protected array $_settings       = [];
+	protected array $_settings = [];
 	protected array $_configSettings = [];
 	
 	// Common vars
 	protected string $_handler;
-	protected array  $_routerMap;
-	protected array  $_serverMap;
+	protected array $_routerMap;
+	protected array $_serverMap;
 	
 	// Route map
 	protected array $_map;
+	protected array $_uri;
 	
 	/**
 	 * @return bool
 	 */
 	public function factory() : bool {
 		// Solve URI (URI and query)
-		$uri = ( new Base )->factory();
+		$this->_uri = ( new Base )->factory();
 		
 		// Connect URI to config
 		$this->_getConfigObject();
@@ -124,7 +125,7 @@ class Route extends Request {
 		// Modify URI array key names for Router (Map)
 		// Connect params to URI params & Resolve Routing MAP (example if SMART ROUTING is used)
 		// Also resolve application namespace etc
-		$this->_routerMap = $this->_setUri($uri, $this->_settings['namespace'] ?? self::defaultNamespace);
+		$this->_routerMap = $this->_setUri($this->_uri, $this->_settings['namespace'] ?? self::defaultNamespace);
 		
 		//
 		return TRUE;
@@ -203,11 +204,13 @@ class Route extends Request {
 	/**
 	 * Launch the application
 	 *
+	 * @param    array    $params
+	 *
 	 * @return Action|bool
 	 */
-	public function prepare() : Action|bool {
+	public function prepare(array $params = []) : Action|bool {
 		// Prepare the Router
-		if($this->_prepareRouter($this->_routerMap, ['lang' => ( $_SESSION['lang'] ?? 'en' )])):
+		if($this->_prepareRouter($this->_routerMap, $params)):
 			// Get the Controller
 			if(is_object($c = $this->getController())):
 				return $c;
@@ -270,7 +273,7 @@ class Route extends Request {
 	}
 	
 	/**
-	 * @param    string    $key
+	 * @param    null|string    $key
 	 *
 	 * @return  bool
 	 */
@@ -384,7 +387,7 @@ class Route extends Request {
 		endif;
 		
 		//
-		return (boolean)$this->_dirModule;
+		return (bool)$this->_dirModule;
 	}
 	
 	/**
@@ -447,17 +450,15 @@ class Route extends Request {
 	 * @return  string
 	 */
 	protected function _formatName(string $unformatted) : string {
-		if(is_string($unformatted) && trim($unformatted) !== ''):
-			// Explode name to segments if there is a path separator
-			if(is_array($segments = explode(PATH_SEPARATOR, trim($unformatted)))):
-				// Lowercase ALL characters
-				foreach($segments as $key => $val):
-					$segments[$key] = ucwords(preg_replace('/[^a-z0-9 ]/', '', mb_strtolower($val)));
-				endforeach;
-				
-				//
-				return implode('_', $segments);
-			endif;
+		// Explode name to segments if there is a path separator
+		if(is_string($unformatted) && trim($unformatted) !== '' &&
+		   is_array($segments = explode(PATH_SEPARATOR, trim($unformatted)))):
+			foreach($segments as $key => $val):
+				$segments[$key] = ucwords(preg_replace('/[^a-z0-9 ]/', '', mb_strtolower($val)));
+			endforeach;
+			
+			//
+			return implode('_', $segments);
 		endif;
 		
 		return '';
@@ -492,10 +493,10 @@ class Route extends Request {
 	protected function _routeRewrite(array $map, array $vars = []) : bool {
 		$this->_map =
 			['query' => ['module' => $map['module'], 'controller' => $map['controller'], 'action' => $map['action'],],
-				'route' => ['module' => $this->_nameModule, 'controller' => $this->_nameController,
-					'action' => mb_strtolower(substr($this->_nameAction, 0,
-					                                 strlen($this->_nameAction) - strlen('action'))),],
-				'vars' => $vars];
+			 'route' => ['module' => $this->_nameModule, 'controller' => $this->_nameController,
+			             'action' => mb_strtolower(substr($this->_nameAction, 0,
+			                                              strlen($this->_nameAction) - strlen('action'))),],
+			 'vars' => $vars];
 		
 		return TRUE;
 	}
@@ -519,11 +520,11 @@ class Route extends Request {
 	}
 	
 	/**
-	 * @param    object    $controller
+	 * @param    Action    $controller
 	 *
 	 * @throws Exception
 	 */
-	public function execute(object $controller) : void {
+	public function execute(Action $controller) : void {
 		// Execute dispatcher
 		if(is_object($controller) && is_object($dispatcher = $this->getDispatcher($controller))):
 			// Dispatch the Application
@@ -534,11 +535,11 @@ class Route extends Request {
 	}
 	
 	/**
-	 * @param    object    $controller
+	 * @param    Action    $controller
 	 *
 	 * @return  Dispatcher
 	 */
-	#[Pure] public function getDispatcher(object $controller) : Dispatcher {
+	#[Pure] public function getDispatcher(Action $controller) : Dispatcher {
 		return new Dispatcher($controller, $this->_nameAction);
 	}
 	
