@@ -44,8 +44,8 @@ class Bootstrap {
 	protected object $_router;
 	
 	//
-	private        $_autoload;
-	private object $_loader;    // MVC Router instance
+	private bool $_autoload;
+	private Autoload $_loader;    // MVC Router instance
 	
 	/**
 	 * Bootstrap constructor.
@@ -178,6 +178,8 @@ class Bootstrap {
 	
 	/**
 	 * Factory & execute router + application
+	 *
+	 * @throws Exception
 	 */
 	public function factory() : void {
 		if($this->_router instanceof Route):
