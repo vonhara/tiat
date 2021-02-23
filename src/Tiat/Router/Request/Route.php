@@ -439,7 +439,11 @@ class Route extends Request {
 		endif;
 		
 		// Return file status
-		return (bool)$this->_fileController;
+		if(empty($this->_fileController)):
+			return false;
+		else:
+			return (bool)$this->_fileController;
+		endif;
 	}
 	
 	/**
