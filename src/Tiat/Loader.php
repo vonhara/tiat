@@ -37,7 +37,7 @@ use function register_shutdown_function;
 class Loader {
 	
 	//
-	public const TIAT_VERSION      = '10.0.0';
+	public const TIAT_VERSION      = '10.1.0';
 	public const TIAT_VERSION_NAME = 'Hawk';
 	
 	//
