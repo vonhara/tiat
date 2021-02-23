@@ -23,6 +23,7 @@ namespace Tiat\Router\Request;
 
 //
 use Exception;
+use RuntimeException;
 
 /**
  * Class Dispatcher
@@ -56,7 +57,7 @@ class Dispatcher extends Base {
 			$this->postDispatch();
 			$this->dispatchEnd();
 		} catch(Exception $e) {
-			throw new Exception($e);
+			throw new RuntimeException($e);
 		}
 	}
 	
