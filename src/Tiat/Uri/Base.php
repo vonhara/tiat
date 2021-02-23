@@ -114,7 +114,7 @@ class Base {
 	 *
 	 * @return $this
 	 */
-	final protected function _setRequestUri(string $requestUri = NULL) {
+	final protected function _setRequestUri(string $requestUri = NULL) : self {
 		if($requestUri === NULL):
 			// Check this first so IIS will catch
 			if(isset($_SERVER['HTTP_X_REWRITE_URL'])):
@@ -159,6 +159,7 @@ class Base {
 		//
 		$this->_requestUri = $requestUri;
 		
+		//
 		return $this;
 	}
 	
@@ -259,7 +260,7 @@ class Base {
 	 *
 	 * @return  string|boolean
 	 */
-	#[Pure] private function _validate($value = NULL) {
+	#[Pure] private function _validate($value = NULL) : bool|string {
 		if(is_scalar($value) && ! empty($value)):
 			return (string)$value;
 		endif;
@@ -332,10 +333,8 @@ class Base {
 		// This will work ONLY with TOP-LEVEL domains
 		// So example www.your-domain.co.uk will return UK (not co.uk)
 		// Working with gTLD + sTLD + ccTLD
-		if(! ( new Network() )->valid4($host, TRUE)):
-			if(! empty($tmp = array_reverse(explode('.', $host)))):
-				return $tmp[0] ?? '';
-			endif;
+		if(! empty($tmp = array_reverse(explode('.', $host))) && ! ( new Network() )->valid4($host, TRUE)):
+			return $tmp[0] ?? '';
 		endif;
 		
 		return '';
