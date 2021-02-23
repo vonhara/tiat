@@ -85,6 +85,7 @@ class Config {
 				if(isset($conf['router']['reroute']) && strlen($conf['router']['reroute']) > 1):
 					//
 					[$t1, $t2] = $this->_rerouteApplication($conf['router']['reroute']);
+					
 					// Check that new route is not root directory & if exists
 					if(! empty($t1) && strlen($t1) > 1 && file_exists($t1)):
 						$path   = $t1;
@@ -112,6 +113,7 @@ class Config {
 			endif;
 		endif;
 		
+		//
 		return $this->_config;
 	}
 	
@@ -295,8 +297,12 @@ class Config {
 	 * @param    null|string    $value
 	 */
 	final public function getConfig(string $key = NULL, string $value = NULL) {
+		if(empty($this->_config)):
+			$this->readConfig();
+		endif;
+		
 		// Return specified key from array with value (OR whole config array IF the $key is null)
-		if($this->readConfig()):
+		if(! empty($this->_config)):
 			if($key !== NULL && isset($this->_config[$key])):
 				if(is_scalar($value) && isset($this->_config[$key][$value])):
 					return $this->_config[$key][$value];
