@@ -280,10 +280,10 @@ class Route extends Request {
 	protected function _setNamespace(string $key = NULL) : bool {
 		if(isset($key[0]) && ctype_alpha($key)):
 			// Convert namespace name
-			$this->_nameNamespace = ucfirst(mb_strtolower(trim($key)));
+			$this->_nameNamespace = ucfirst(mb_strtolower(trim($key), 'UTF-8'));
 			
 			// Set namespace directory
-			return $this->_setNamespaceDirectory(mb_strtolower($key));
+			return $this->_setNamespaceDirectory(mb_strtolower($key, 'UTF-8'));
 		else:
 			$this->_setError('Namespace is not correctly formatted (' . $key . ')');
 		endif;
@@ -336,7 +336,7 @@ class Route extends Request {
 	protected function _setModule(string $key) : bool {
 		if($this->_checkName($key)):
 			// Set module name
-			$this->_nameModule = str_replace(['-', ' '], '', mb_strtolower(trim($key)));
+			$this->_nameModule = str_replace(['-', ' '], '', mb_strtolower(trim($key), 'UTF-8'));
 			
 			// Set module directory
 			if($this->_setModuleDirectory($key)):
@@ -400,7 +400,7 @@ class Route extends Request {
 		$this->_nameNamespaceRoot = $this->_nameNamespace;
 		
 		// Modify namespace name
-		$this->_nameNamespace .= '\\' . ucfirst(mb_strtolower(trim($key))) . '\\' . 'Controller';
+		$this->_nameNamespace .= '\\' . ucfirst(mb_strtolower(trim($key), 'UTF-8')) . '\\' . 'Controller';
 		
 		//
 		return TRUE;
@@ -416,7 +416,7 @@ class Route extends Request {
 	protected function _setController(string $key) : bool {
 		if($this->_checkName($key)):
 			//
-			$this->_nameController = str_replace(['-', ' '], '', mb_strtolower(trim($key)));
+			$this->_nameController = str_replace(['-', ' '], '', mb_strtolower(trim($key), 'UTF-8'));
 			
 			// Let's define the filename for controller
 			return $this->_setControllerFilename($this->_nameController);
@@ -495,7 +495,7 @@ class Route extends Request {
 			['query' => ['module' => $map['module'], 'controller' => $map['controller'], 'action' => $map['action'],],
 			 'route' => ['module' => $this->_nameModule, 'controller' => $this->_nameController,
 			             'action' => mb_strtolower(substr($this->_nameAction, 0,
-			                                              strlen($this->_nameAction) - strlen('action'))),],
+			                                              strlen($this->_nameAction) - strlen('action')), 'UTF-8'),],
 			 'vars' => $vars];
 		
 		return TRUE;
