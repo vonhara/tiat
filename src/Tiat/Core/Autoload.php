@@ -23,6 +23,7 @@ namespace Tiat\Core;
 
 //
 use Exception;
+use RuntimeException;
 
 use function spl_autoload_extensions;
 use function spl_autoload_register;
@@ -74,7 +75,7 @@ class Autoload {
 			try {
 				$file = $this->_getLoader()->loadClass($class);
 			} catch(Exception $e) {
-				throw new Exception('Class ' . $class . ' can not be loaded [' . $e . ']');
+				throw new RuntimeException('Class ' . $class . ' can not be loaded [' . $e . ']');
 			} finally {
 				return $file ?? FALSE;
 			}
