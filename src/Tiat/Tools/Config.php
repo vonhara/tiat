@@ -159,6 +159,7 @@ class Config {
 					$counter--;
 				} while($counter >= 1);
 			endif;
+			
 			// Test that path exists OR use default APPS
 			if(! file_exists($path)):
 				$path = PATH_BASE . 'apps' . DIRECTORY_SEPARATOR . 'default' . DIRECTORY_SEPARATOR;
@@ -189,7 +190,7 @@ class Config {
 	 *
 	 * @return  string
 	 */
-	private function _resolvePath(array $array, int $loops = 0) {
+	private function _resolvePath(array $array, int $loops = 0) : string {
 		if(! empty($array) && $loops):
 			$counter = 0;
 			$path    = '';
@@ -237,7 +238,7 @@ class Config {
 	/**
 	 * Re-route application to other application source
 	 *
-	 * @param    string    $name
+	 * @param    null|string    $name
 	 *
 	 * @return  array
 	 */
