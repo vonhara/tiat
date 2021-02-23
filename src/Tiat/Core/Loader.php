@@ -42,8 +42,9 @@ use function substr;
  */
 class Loader {
 	
-	private $_loaded    = [];
-	private $_extension = [];
+	//
+	private array $_loaded    = [];
+	private array $_extension = [];
 	
 	/**
 	 * @param    null|string    $class
@@ -194,8 +195,8 @@ class Loader {
 	 *
 	 * @return string
 	 */
-	#[Pure] private function _checkLoader(string $name = NULL) : string {
-		if(is_string($name) && strlen($name)):
+	private function _checkLoader(string $name = NULL) : string {
+		if(is_string($name) && $name !== ''):
 			if($name[0] === '\\'):
 				return substr($name, 1);
 			endif;
