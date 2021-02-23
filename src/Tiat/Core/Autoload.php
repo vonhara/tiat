@@ -37,7 +37,7 @@ use function spl_autoload_unregister;
 class Autoload {
 	
 	//
-	private $_loader;
+	private Loader $_loader;
 	
 	/**
 	 *
@@ -54,7 +54,7 @@ class Autoload {
 	private function _registerAutoload(bool $status = TRUE) : bool {
 		// Use namespace if defined
 		if($status):
-			// Mofidy extension order
+			// Modify extension order
 			spl_autoload_extensions('.php');
 			
 			// Register class
@@ -100,7 +100,7 @@ class Autoload {
 	 * @return bool
 	 */
 	private function _getLoaderStatus() : bool {
-		if(! $this->_loader instanceof Loader):
+		if(empty($this->_loader)):
 			// Set Loader filename & require it
 			$filename = PATH_CORE . 'Core' . DIRECTORY_SEPARATOR . 'Loader.php';
 			require_once $filename;
