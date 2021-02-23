@@ -40,9 +40,7 @@ class Request {
 	 * @return mixed
 	 */
 	final public function __get($name) : mixed {
-		if(isset($this->_privateParams[$name])):
-			return $this->_privateParams[$name];
-		endif;
+		return $this->_privateParams[$name] ?? NULL;
 	}
 	
 	/**
