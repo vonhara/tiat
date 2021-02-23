@@ -24,6 +24,7 @@ namespace Tiat\Core;
 //
 use Error;
 use Exception;
+use RuntimeException;
 use Tiat\Router\Request\Route;
 
 use function define;
@@ -82,7 +83,7 @@ class Bootstrap {
 	/**
 	 * Custom destruct
 	 */
-	final static public function destruct() : void {
+	final public static function destruct() : void {
 		return;
 	}
 	
@@ -165,7 +166,7 @@ class Bootstrap {
 				require_once $filename;
 				$this->_loader = new Autoload();
 			else:
-				throw new Exception('Autoloader does not exists');
+				throw new RuntimeException('Autoloader does not exists');
 			endif;
 			
 			// Set autoloader status
