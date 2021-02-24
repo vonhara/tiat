@@ -104,7 +104,7 @@ class Route extends Request {
 		$this->_config->readConfig('settings', $_SERVER['SERVER_NAME']);
 		
 		// Get config ROUTER params
-		$this->_settings = $this->_config->getConfig('router');
+		$this->_settings = (array)$this->_config->getConfig('router');
 		
 		//
 		if(! defined('APPS_RUNMODE')):
@@ -117,7 +117,7 @@ class Route extends Request {
 		endif;
 		
 		// Set application config for later use
-		$this->_configSettings = $this->_config->getConfig();
+		$this->_configSettings = (array)$this->_config->getConfig();
 		
 		// Set handler if exists
 		$this->_handler = (string)( $this->_settings['handler'] ?? '' );
@@ -440,7 +440,7 @@ class Route extends Request {
 		
 		// Return file status
 		if(empty($this->_fileController)):
-			return false;
+			return FALSE;
 		else:
 			return (bool)$this->_fileController;
 		endif;
